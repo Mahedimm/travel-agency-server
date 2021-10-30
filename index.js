@@ -19,6 +19,7 @@ async function run() {
         const database = client.db('time-travel');
         const packagesCollection = database.collection('packages');
         const countryCollection = database.collection('countrys');
+        const orderCollection = database.collection('orders');
 
         // Get Api
         app.get('/packages', async (req, res) => {
@@ -47,7 +48,18 @@ async function run() {
             console.log('load package  id:', id);
             res.send(country);
         });
-
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
+        app.get('/orders/:id', async (req, res) => {
+            const { id } = req.params;
+            const query = { _id: ObjectId(id) };
+            const order = await orderCollection.findOne(query);
+            console.log('load package  id:', id);
+            res.send(order);
+        });
         // post API
         app.post('/packages', async (req, res) => {
             const newPack = req.body;
@@ -63,6 +75,32 @@ async function run() {
             // console.log(`A document was inserted with the _id: ${result.insertedId}`);
             // // check the data
             // console.log('hiting the post', req.body);
+            res.json(result);
+        });
+        app.post('/orders', async (req, res) => {
+            const newPack = req.body;
+            const result = await orderCollection.insertOne(newPack);
+            // console.log(`A document was inserted with the _id: ${result.insertedId}`);
+            // // check the data
+            // console.log('hiting the post', req.body);
+            res.json(result);
+        });
+        // UPDATE API
+        app.put('/packages/:id', async (req, res) => {
+            const { id } = req.params;
+            const updatedPackages = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    name: updatedPackages.name,
+                    information: updatedPackages.information,
+                    price: updatedPackages.price,
+                    cover: updatedPackages.cover,
+                },
+            };
+            const result = await packagesCollection.updateOne(filter, updateDoc, options);
+            // console.log('update packages', req);
             res.json(result);
         });
 
