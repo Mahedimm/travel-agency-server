@@ -134,5 +134,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log('running server port at', port);
+    console.log('running server port at');
 });
