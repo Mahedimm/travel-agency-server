@@ -12,11 +12,11 @@
   
 ## Tech Stack
 
-**Client:** React,  TailwindCSS 
+**Client:** React, TailwindCSS 
 
 **Server:** Node, Express 
 
-**Database:** Mondodb
+**Database:** Mongodb
 
   
 ## Live Link
